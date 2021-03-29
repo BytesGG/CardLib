@@ -19,9 +19,16 @@ module.exports.create = async (template, values, consumer) => {
     //  If fonts exists and is object, read and register
     if (typeof template.fonts == 'object') {
         for (let font in template.fonts) {
-            Canvas.registerFont(template.fonts[font], {
-                'family': font
-            });
+            let path = template.fonts[font];
+
+            if (typeof path == 'string') {
+                Canvas.registerFont(
+                    this.replace(path, values),
+                    {
+                    'family': font
+                }
+            );
+            }
         }
     }
 
@@ -37,7 +44,7 @@ module.exports.create = async (template, values, consumer) => {
             let height = panel.height || 0;
 
             if (typeof panel.color == 'string') {
-                let color = this.replace(panel.color);
+                let color = this.replace(panel.color, values);
 
                 //  If color specified and width/height bigger than 0, draw rect
                 if (width > 0 && height > 0 && /^#([0-9a-f]{3}){1,2}$/.test(color)) {
@@ -47,12 +54,9 @@ module.exports.create = async (template, values, consumer) => {
             }
 
             if (typeof panel.url == 'string') {
-                let url = panel.url.replace(
-                    /(%[a-zA-Z]+%)/g,
-                    id => values[id.substring(1, id.length - 1)] || "?"
-                )
-
-                let i = await Canvas.loadImage(url);
+                let i = await Canvas.loadImage(
+                    this.replace(panel.url, values)
+                );
 
                 if (width == 0 && height == 0) {
                     width = i.width;
@@ -97,7 +101,7 @@ module.exports.create = async (template, values, consumer) => {
             }
 
             if (typeof text.color == 'string') {
-                let color = this.replace(text.color);
+                let color = this.replace(text.color, values);
 
                 if (/^#([0-9a-f]{3}){1,2}$/.test(color)) {
                     ctx.fillStyle = color;
@@ -113,7 +117,7 @@ module.exports.create = async (template, values, consumer) => {
             if (typeof text.y != 'number') continue;
 
             ctx.fillText(
-                this.replace(text.value),
+                this.replace(text.value, values),
                 text.x,
                 text.y
             );
