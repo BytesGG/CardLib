@@ -81,10 +81,6 @@ module.exports.create = async (template, values, consumer) => {
         let changed = true;
 
         for (let text of template.text) {
-            if (typeof text.x != 'number') continue;
-            if (typeof text.y != 'number') continue;
-            if (!text.hasOwnProperty('value')) continue;
-
             if (Number.isInteger(text.size)) {
                 size = text.size;
                 changed = true;
@@ -104,9 +100,13 @@ module.exports.create = async (template, values, consumer) => {
                 ctx.fillStyle = text.color;
             }
 
-            if (text.hasOwnProperty('centered')) {
-                ctx.textAlign = text.centered ? 'center' : 'left';
+            if (typeof text.align == 'string') {
+                ctx.textAlign = text.align;
             }
+
+            if (typeof text.x != 'number') continue;
+            if (typeof text.y != 'number') continue;
+            if (!text.hasOwnProperty('value')) continue;
 
             ctx.fillText(
                 text.value.replace(
