@@ -36,35 +36,35 @@ module.exports.create = async (template, values, consumer) => {
             let width = panel.width || 0;
             let height = panel.height || 0;
 
-            //  If color specified and width/height bigger than 0, draw rect
-            if (width > 0 && height > 0 && /^#([0-9a-f]{3}){1,2}$/.test(panel.color)) {
-                ctx.fillStyle = panel.color;
-                ctx.fillRect(x, y, width, height);
+            if (typeof panel.color == 'string') {
+                let color = this.replace(panel.color);
+
+                //  If color specified and width/height bigger than 0, draw rect
+                if (width > 0 && height > 0 && /^#([0-9a-f]{3}){1,2}$/.test(color)) {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, width, height);
+                }
             }
 
-            if (panel.hasOwnProperty('url')) {
-                //  Replace placeholders
-                panel.url = panel.url.replace(
+            if (typeof panel.url == 'string') {
+                let url = panel.url.replace(
                     /(%[a-zA-Z]+%)/g,
                     id => values[id.substring(1, id.length - 1)] || "?"
                 )
 
-                //  If valid url
-                if (typeof panel.url == 'string') {
-                    let i = await Canvas.loadImage(panel.url);
+                let i = await Canvas.loadImage(url);
 
-                    if (width == 0 && height == 0) {
-                        width = i.width;
-                        height = i.height;
-                    }
-
-                    if (panel.centered) {
-                        x -= width / 2;
-                        y -= height / 2;
-                    }
-
-                    ctx.drawImage(i, x, y, width, height);
+                if (width == 0 && height == 0) {
+                    width = i.width;
+                    height = i.height;
                 }
+
+                if (panel.centered) {
+                    x -= width / 2;
+                    y -= height / 2;
+                }
+
+                ctx.drawImage(i, x, y, width, height);
             }
         }
 
@@ -96,23 +96,24 @@ module.exports.create = async (template, values, consumer) => {
                 changed = false;
             }
 
-            if (/^#([0-9a-f]{3}){1,2}$/.test(text.color)) {
-                ctx.fillStyle = text.color;
+            if (typeof text.color == 'string') {
+                let color = this.replace(text.color);
+
+                if (/^#([0-9a-f]{3}){1,2}$/.test(color)) {
+                    ctx.fillStyle = color;
+                }
             }
 
             if (typeof text.align == 'string') {
                 ctx.textAlign = text.align;
             }
 
+            if (typeof text.value != 'string') continue;
             if (typeof text.x != 'number') continue;
             if (typeof text.y != 'number') continue;
-            if (!text.hasOwnProperty('value')) continue;
 
             ctx.fillText(
-                text.value.replace(
-                    /(%[a-zA-Z]+%)/g,
-                    id => values[id.substring(1, id.length - 1)] || "?"
-                ),
+                this.replace(text.value),
                 text.x,
                 text.y
             );
@@ -126,4 +127,11 @@ module.exports.create = async (template, values, consumer) => {
     }
 
     return canvas.toBuffer('image/png');
+}
+
+module.exports.replace = (text, values) => {
+    return text.replace(
+        /(%[a-zA-Z]+%)/g,
+        id => values[id.substring(1, id.length - 1)] || "?"
+    );
 }
