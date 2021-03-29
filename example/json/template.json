@@ -1,0 +1,40 @@
+{
+    "width": 512,
+    "height": 512,
+    "fonts": {
+        "Ubuntu": "font/Ubuntu-Bold.ttf"
+    },
+    "panels": [{
+        "width": 512,
+        "height": 512,
+        "color": "#690000",
+        "url": "image/border.png"
+    }, {
+        "width": 512,
+        "height": 512,
+        "url": "image/logo.png"
+    }],
+    "text": [{
+        "size": 24,
+        "align": "left",
+        "color": "#fff",
+        "family": "Ubuntu"
+    }, {
+        "x": 20,
+        "y": 28,
+        "value": "Example"
+    }, {
+        "x": 20,
+        "y": 48,
+        "value": "Text",
+        "color": "#ca20e8"
+    }, {
+        "x": 492,
+        "y": 26,
+        "size": 30,
+        "value": "%text%",
+        "align": "right",
+        "color": "%color%",
+        "family": "sans-serif"
+    }]
+}

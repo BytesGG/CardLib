@@ -1,38 +1,30 @@
 const Canvas = require('canvas');
 
 module.exports.create = async (template, values, consumer) => {
-    //  Check nulls
     if (typeof template != 'object') throw 'Template must be of type \'object\'';
     if (typeof values != 'object') throw 'Values must be of type \'object\'';
 
-    //  Validate size
     if (typeof template.width != 'number') throw 'Width must be of type \'number\'';
     if (typeof template.height != 'number') throw 'Width must be of type \'number\'';
 
     if (template.width <= 0) throw 'Width must be more than 0';
     if (template.height <= 0) throw 'Height must be more than 0';
 
-    //  Create
     let canvas = Canvas.createCanvas(template.width, template.height);
     let ctx = canvas.getContext('2d');
 
-    //  If fonts exists and is object, read and register
     if (typeof template.fonts == 'object') {
         for (let font in template.fonts) {
             let path = template.fonts[font];
 
             if (typeof path == 'string') {
-                Canvas.registerFont(
-                    this.replace(path, values),
-                    {
+                Canvas.registerFont(this.replace(path, values), {
                     'family': font
-                }
-            );
+                });
             }
         }
     }
 
-    //  If panels exists and is array
     if (Array.isArray(template.panels)) {
         ctx.save();
 
@@ -46,7 +38,6 @@ module.exports.create = async (template, values, consumer) => {
             if (typeof panel.color == 'string') {
                 let color = this.replace(panel.color, values);
 
-                //  If color specified and width/height bigger than 0, draw rect
                 if (width > 0 && height > 0 && /^#([0-9a-f]{3}){1,2}$/.test(color)) {
                     ctx.fillStyle = color;
                     ctx.fillRect(x, y, width, height);
@@ -54,9 +45,7 @@ module.exports.create = async (template, values, consumer) => {
             }
 
             if (typeof panel.url == 'string') {
-                let i = await Canvas.loadImage(
-                    this.replace(panel.url, values)
-                );
+                let i = await Canvas.loadImage(this.replace(panel.url, values));
 
                 if (width == 0 && height == 0) {
                     width = i.width;
