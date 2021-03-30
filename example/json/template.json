@@ -7,11 +7,13 @@
     "panels": [{
         "width": 512,
         "height": 512,
-        "color": "#690000",
+        "color": "#525252",
         "url": "image/border.png"
     }, {
-        "width": 512,
-        "height": 512,
+        "x": 428,
+        "y": 428,
+        "width": 64,
+        "height": 64,
         "url": "image/logo.png"
     }],
     "text": [{
@@ -21,19 +23,19 @@
         "family": "Ubuntu"
     }, {
         "x": 20,
-        "y": 28,
-        "value": "Example"
+        "y": 30,
+        "value": "I am not a"
     }, {
-        "x": 20,
-        "y": 48,
-        "value": "Text",
+        "x": 140,
+        "y": 30,
+        "value": "graphic designer",
         "color": "#ca20e8"
     }, {
-        "x": 492,
-        "y": 26,
+        "x": 256,
+        "y": 464,
         "size": 30,
         "value": "%text%",
-        "align": "right",
+        "align": "center",
         "color": "%color%",
         "family": "sans-serif"
     }]
