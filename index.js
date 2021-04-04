@@ -45,19 +45,23 @@ module.exports.create = async (template, values, consumer) => {
             }
 
             if (typeof panel.url == 'string') {
-                let i = await Canvas.loadImage(this.replace(panel.url, values));
+                let url = this.replace(panel.url, values);
 
-                if (width == 0 && height == 0) {
-                    width = i.width;
-                    height = i.height;
+                if (url != '?') {
+                    let i = await Canvas.loadImage(url);
+
+                    if (width == 0 && height == 0) {
+                        width = i.width;
+                        height = i.height;
+                    }
+
+                    if (panel.centered) {
+                        x -= width / 2;
+                        y -= height / 2;
+                    }
+
+                    ctx.drawImage(i, x, y, width, height);
                 }
-
-                if (panel.centered) {
-                    x -= width / 2;
-                    y -= height / 2;
-                }
-
-                ctx.drawImage(i, x, y, width, height);
             }
         }
 
