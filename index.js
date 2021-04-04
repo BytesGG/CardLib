@@ -124,7 +124,7 @@ module.exports.create = async (template, values, consumer) => {
 
 module.exports.replace = (text, values) => {
     return text.replace(
-        /(%[a-zA-Z]+%)/g,
+        /(%[a-zA-Z.]+%)/g,
         id => values[id.substring(1, id.length - 1)] || "?"
     );
 }
