@@ -125,6 +125,20 @@ module.exports.create = async (template, values, consumer) => {
 module.exports.replace = (text, values) => {
     return text.replace(
         /(%[a-zA-Z.]+%)/g,
-        id => values[id.substring(1, id.length - 1)] || "?"
+        match => {
+            let property,
+                object = values,
+                path = match.substring(1, match.length - 1).split('.');
+
+            while (property = path.shift()) {
+                if (!object.hasOwnProperty(property)) {
+                    return "?";
+                }
+
+                object = object[property];
+            }
+
+            return object;
+        }
     );
 }
