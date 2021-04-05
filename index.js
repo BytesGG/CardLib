@@ -38,7 +38,7 @@ module.exports.create = async (template, values, consumer) => {
             if (typeof panel.color == 'string') {
                 let color = this.replace(panel.color, values);
 
-                if (width > 0 && height > 0 && /^#([0-9a-f]{3}){1,2}$/.test(color)) {
+                if (width > 0 && height > 0 && /^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
                     ctx.fillStyle = color;
                     ctx.fillRect(x, y, width, height);
                 }
@@ -96,7 +96,7 @@ module.exports.create = async (template, values, consumer) => {
             if (typeof text.color == 'string') {
                 let color = this.replace(text.color, values);
 
-                if (/^#([0-9a-f]{3}){1,2}$/.test(color)) {
+                if (/^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
                     ctx.fillStyle = color;
                 }
             }
