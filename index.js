@@ -154,7 +154,7 @@ module.exports.create = async (template, values, consumer) => {
                         }
                     }
 
-                    if (typeof weight != 'number' || weight <= 0) continue;
+                    if (typeof weight != 'number' || weight < 0) continue;
                     if (typeof section.color != 'string') continue;
 
                     let color = this.replace(section.color, values);
@@ -169,21 +169,26 @@ module.exports.create = async (template, values, consumer) => {
                 }
 
                 if (total == 0) {
-                    ctx.strokeStyle = "#000";
+                    if (circle.balance) {
+                        total = sections.length;
+                        sections = sections.map(s => ({...s, weight: 1}))
+                    } else {
+                        ctx.strokeStyle = "#000";
 
-                    if (typeof circle.default == 'string') {
-                        let color = this.replace(circle.default, values);
+                        if (typeof circle.default == 'string') {
+                            let color = this.replace(circle.default, values);
 
-                        if (/^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
-                            ctx.strokeStyle = color;
+                            if (/^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
+                                ctx.strokeStyle = color;
+                            }
                         }
+
+                        ctx.beginPath();
+                        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+                        ctx.stroke();
+
+                        continue;
                     }
-
-                    ctx.beginPath();
-                    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-                    ctx.stroke();
-
-                    continue;
                 }
 
                 let previous = -(Math.PI / 2);
@@ -205,7 +210,7 @@ module.exports.create = async (template, values, consumer) => {
     }
 
     if (typeof consumer == 'function') {
-        consumer(ctx);
+        await consumer(ctx);
     }
 
     return canvas.toBuffer('image/png');
