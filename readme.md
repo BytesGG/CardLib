@@ -39,7 +39,8 @@ Properties are continuous and will use previously set values if missing.
 - **y** - *`number required`*
 - **size** - *`number initially 10` font size to render*
 - **value** - *`string required` text to render, can contain placeholders*
-- **align** - *`string initially left` must be either left, right, or center*
+- **align** - *`string initially left` must be either 'left', 'right', or 'center'*
+- **baseline** - *`string initially middle` must be either 'top', 'hanging', 'middle', 'alphabetic', 'ideographic', or 'bottom'*
 - **color** - *`string initially #fff` hex code or placeholder to fill text*
 - **family** - *`string initially 'sans-serif'` font family to use*
 

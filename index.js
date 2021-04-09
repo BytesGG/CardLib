@@ -105,6 +105,10 @@ module.exports.create = async (template, values, consumer) => {
                 ctx.textAlign = text.align;
             }
 
+            if (typeof text.baseline == 'string') {
+                ctx.textBaseline = text.baseline;
+            }
+
             if (typeof text.value != 'string') continue;
             if (typeof text.x != 'number') continue;
             if (typeof text.y != 'number') continue;
