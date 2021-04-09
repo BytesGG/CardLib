@@ -119,6 +119,83 @@ module.exports.create = async (template, values, consumer) => {
         ctx.restore();
     }
 
+    if (Array.isArray(template.circles)) {
+        ctx.save();
+        ctx.lineCap = 'butt';
+
+        for (let circle of template.circles) {
+            if (typeof circle.x != 'number') continue;
+            if (typeof circle.y != 'number') continue;
+            if (typeof circle.width != 'number') continue;
+            if (typeof circle.radius != 'number') continue;
+
+            if (Array.isArray(circle.sections)) {
+                ctx.lineWidth = circle.width;
+
+                let total = 0;
+                let sections = [];
+
+                for (let section of circle.sections) {
+                    let weight = section.weight;
+
+                    if (typeof weight == 'string') {
+                        weight = parseInt(this.replace(section.weight, values));
+
+                        if (isNaN(weight)) {
+                            continue;
+                        }
+                    }
+
+                    if (typeof weight != 'number' || weight <= 0) continue;
+                    if (typeof section.color != 'string') continue;
+
+                    let color = this.replace(section.color, values);
+
+                    if (/^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
+                        total += weight;
+                        sections.push({
+                            "color": color,
+                            "weight": weight
+                        });
+                    }
+                }
+
+                if (total == 0) {
+                    ctx.strokeStyle = "#000";
+
+                    if (typeof circle.default == 'string') {
+                        let color = this.replace(circle.default, values);
+
+                        if (/^#([0-9a-fA-F]{3}){1,2}$/.test(color)) {
+                            ctx.strokeStyle = color;
+                        }
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    continue;
+                }
+
+                let previous = -(Math.PI / 2);
+
+                for (let section of sections) {
+                    let amount = (Math.PI * 2) * (section.weight / total);
+
+                    ctx.strokeStyle = section.color;
+                    ctx.beginPath();
+                    ctx.arc(circle.x, circle.y, circle.radius, previous, previous + amount);
+                    ctx.stroke();
+
+                    previous += amount;
+                }
+            }
+        }
+
+        ctx.restore();
+    }
+
     if (typeof consumer == 'function') {
         consumer(ctx);
     }

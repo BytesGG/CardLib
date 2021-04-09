@@ -43,5 +43,22 @@ Properties are continuous and will use previously set values if missing.
 - **color** - *`string initially #fff` hex code or placeholder to fill text*
 - **family** - *`string initially 'sans-serif'` font family to use*
 
+#### Circles (outline pie charts)
+Array of json objects with the following properties.
+
+- **x** - *`number required` center point*
+- **y** - *`number required` center point*
+- **width** - *`number required` line width*
+- **radius** - *`number required` ...*
+- **default** - *`string defaults to #000` hex code or placeholder used to draw if all sections total to 0*
+- **sections** - *`array of Section` all sections of the circle*
+
+#### Section
+Used only for drawing circles.
+If either value is invalid the section will be skipped.
+
+- **color** - *`string required` can be placeholder*
+- **weight** - *`string/number required` can be placeholder, must result in a number*
+
 ## Example
 An example application can be found in `/example/`.

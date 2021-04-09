@@ -38,5 +38,22 @@
         "align": "center",
         "color": "%color%",
         "family": "sans-serif"
+    }],
+    "circles": [{
+        "x": 150,
+        "y": 150,
+        "width": 8,
+        "radius": 100,
+        "default": "#fff",
+        "sections": [{
+            "color": "#f00",
+            "weight": 1
+        }, {
+            "color": "#0f0",
+            "weight": 2
+        }, {
+            "color": "#00f",
+            "weight": 3
+        }]
     }]
 }
