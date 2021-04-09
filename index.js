@@ -205,7 +205,7 @@ module.exports.create = async (template, values, consumer) => {
 
 module.exports.replace = (text, values) => {
     return text.replace(
-        /(%[a-zA-Z._]+%)/g,
+        /(%[a-zA-Z0-9._]+%)/g,
         match => {
             let property,
                 object = values,
