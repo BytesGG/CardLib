@@ -1,4 +1,4 @@
-const CardLib = require('CardLib');
+const CardLib = require('../index.js');
 
 CardLib.create(
     require('./json/template.json'),
