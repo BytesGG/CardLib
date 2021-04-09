@@ -57,6 +57,10 @@ module.exports.create = async (template, values, consumer) => {
                     if (width == 0 && height == 0) {
                         width = i.width;
                         height = i.height;
+                    } else if (height == 0) {
+                        height = width * i.height / i.width;
+                    } else if (width == 0) {
+                        width = height * i.width / i.height;
                     }
 
                     if (panel.centered) {
