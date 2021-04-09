@@ -13,6 +13,10 @@ module.exports.create = async (template, values, consumer) => {
     let canvas = Canvas.createCanvas(template.width, template.height);
     let ctx = canvas.getContext('2d');
 
+    if (typeof template.smooth == 'boolean') {
+        ctx.imageSmoothingEnabled = template.smooth;
+    }
+
     if (typeof template.fonts == 'object') {
         for (let font in template.fonts) {
             let path = template.fonts[font];
